@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.astuetz.viewpager.extensions.sample;
+package com.slht.suixinplayer;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +35,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.astuetz.viewpager.extensions.sample.QuickContactFragment;
+import com.astuetz.viewpager.extensions.sample.SuperAwesomeCardFragment;
 import com.slht.suixinplayer.R;
 
 public class MainActivity extends FragmentActivity {
@@ -46,7 +48,7 @@ public class MainActivity extends FragmentActivity {
 	private MyPagerAdapter adapter;
 
 	private Drawable oldBackground = null;
-	private int currentColor = 0xFF666666;
+	private int currentColor = 0xFFC74B46;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -176,8 +178,7 @@ public class MainActivity extends FragmentActivity {
 
 	public class MyPagerAdapter extends FragmentPagerAdapter {
 
-		private final String[] TITLES = { "Categories", "Home", "Top Paid", "Top Free", "Top Grossing", "Top New Paid",
-				"Top New Free", "Trending" };
+		private final String[] TITLES = { "我的音乐", "在线音乐"};
 
 		public MyPagerAdapter(FragmentManager fm) {
 			super(fm);

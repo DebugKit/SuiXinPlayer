@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.astuetz.viewpager.extensions.sample.MainActivity;
-
 public class SplashActivity extends Activity {
 
     private static final int START_ACTIVITY = 0x1;

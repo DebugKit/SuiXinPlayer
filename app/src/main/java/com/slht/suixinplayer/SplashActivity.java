@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.astuetz.viewpager.extensions.sample.MainActivity;
+
 public class SplashActivity extends Activity {
 
     private static final int START_ACTIVITY = 0x1;
@@ -17,8 +19,7 @@ public class SplashActivity extends Activity {
             super.handleMessage(msg);
             if (msg.what == START_ACTIVITY) {
                 Toast.makeText(SplashActivity.this, "this", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SplashActivity.this, com.astuetz.viewpager.extensions.sample.MainActivity
-                        .class));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
         }

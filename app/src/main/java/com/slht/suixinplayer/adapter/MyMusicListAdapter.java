@@ -57,8 +57,8 @@ public class MyMusicListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         MP3Info mp3Info = (MP3Info) getItem(position);
-        holder.singer.setText(mp3Info.getTitle());
-        holder.song.setText(mp3Info.getArtist());
+        holder.singer.setText(mp3Info.getArtist());
+        holder.song.setText(mp3Info.getTitle());
         holder.time.setText(MediaUtils.formartTime(mp3Info.getDuration()));
         return convertView;
     }

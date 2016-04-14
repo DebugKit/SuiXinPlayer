@@ -1,18 +1,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.slht.suixinplayer.MyMusicListFragment">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#eeeeee"
+                tools:context="com.slht.suixinplayer.MyMusicListFragment">
 
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll"
-        android:listSelector="@null"
+        android:listSelector="@android:color/transparent"
+        android:background="@android:color/white"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:scrollbars="none" />
+        android:scrollbars="none"/>
 
     <LinearLayout
         android:id="@+id/ll"
@@ -25,11 +27,13 @@
         android:paddingRight="10dp">
 
         <ImageView
+            android:id="@+id/song_image"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_weight="0"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/app_logo2" />
+            android:layout_weight="0"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/app_logo2"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -46,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="歌曲名"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
 
             <TextView
                 android:id="@+id/singer"
@@ -54,20 +58,22 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/song"
                 android:text="歌手名"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"/>
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/pause"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:paddingRight="10dp"
-            android:src="@mipmap/player_btn_play_normal" />
+            android:src="@mipmap/player_btn_play_normal"/>
 
         <ImageView
+            android:id="@+id/next"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0"
-            android:src="@mipmap/player_btn_next_normal" />
+            android:src="@mipmap/player_btn_next_normal"/>
     </LinearLayout>
 </RelativeLayout>

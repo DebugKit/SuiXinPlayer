@@ -12,12 +12,26 @@ import com.slht.suixinplayer.utils.MediaUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class PlayService extends Service {
 
     private MediaPlayer mPlayer;
     private int currentPosition;
     private List<MP3Info> mp3Infos;
+    private MusicUpdateListener musicUpdateListener;
+    Runnable updateStatusRunnable = new Runnable() {
+        @Override
+        public void run() {
+            while (true) {
+                if (musicUpdateListener != null) {
+                    musicUpdateListener.onPublish(getCurrentProgress());
+                }
+            }
+        }
+    };
+    private ExecutorService es = Executors.newSingleThreadExecutor();
 
     public PlayService() {
     }
@@ -31,6 +45,7 @@ public class PlayService extends Service {
     public void onCreate() {
         super.onCreate();
         mPlayer = new MediaPlayer();
+        es.execute(updateStatusRunnable);
     }
 
     /**
@@ -52,6 +67,9 @@ public class PlayService extends Service {
                         currentPosition = position;
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                    if (musicUpdateListener != null) {
+                        musicUpdateListener.onChange(currentPosition);
                     }
                 }
             }
@@ -98,6 +116,30 @@ public class PlayService extends Service {
         if (mPlayer != null && !mPlayer.isPlaying()) {
             mPlayer.start();
         }
+    }
+
+    public int getDuration() {
+        return mPlayer.getDuration();
+    }
+
+    public void seekTo(int msec) {
+        mPlayer.seekTo(msec);
+    }
+
+    public int getCurrentProgress() {
+        if (mPlayer != null && mPlayer.isPlaying())
+            return mPlayer.getCurrentPosition();
+        return 0;
+    }
+
+    public void setMusicUpdateListener(MusicUpdateListener musicUpdateListener) {
+        this.musicUpdateListener = musicUpdateListener;
+    }
+
+    public interface MusicUpdateListener {
+        void onPublish(int progress);
+
+        void onChange(int position);
     }
 
     public class PlayBinder extends Binder {

@@ -14,15 +14,28 @@ import com.slht.suixinplayer.service.PlayService;
 /**
  * Created by LI on 2016/4/14.
  */
-public class BaseActivity extends FragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
 
     public PlayService playService;
     private boolean isBound = false;
+
+    private PlayService.MusicUpdateListener musicUpdateListener = new PlayService.MusicUpdateListener() {
+        @Override
+        public void onPublish(int progress) {
+            publish(progress);
+        }
+
+        @Override
+        public void onChange(int position) {
+            change(position);
+        }
+    };
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             PlayService.PlayBinder playBinder = (PlayService.PlayBinder) service;
             playService = playBinder.getPlayService();
+            playService.setMusicUpdateListener(musicUpdateListener);
         }
 
         @Override
@@ -31,6 +44,10 @@ public class BaseActivity extends FragmentActivity {
             isBound = false;
         }
     };
+
+    public abstract void publish(int progress);
+
+    public abstract void change(int position);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

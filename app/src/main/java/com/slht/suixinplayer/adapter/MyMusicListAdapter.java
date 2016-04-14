@@ -60,6 +60,7 @@ public class MyMusicListAdapter extends BaseAdapter {
         holder.singer.setText(mp3Info.getArtist());
         holder.song.setText(mp3Info.getTitle());
         holder.time.setText(MediaUtils.formartTime(mp3Info.getDuration()));
+        holder.song_imags.setImageBitmap(mp3Info.getBitImage());
         return convertView;
     }
 

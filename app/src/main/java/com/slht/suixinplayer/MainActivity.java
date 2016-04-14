@@ -23,7 +23,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.TypedValue;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -38,6 +40,8 @@ public class MainActivity extends BaseActivity {
     private ViewPager pager;
     private MyPagerAdapter adapter;
     private List<Fragment> fragments;
+
+    private MyMusicListFragment myMusicListFragment;
 
     private Drawable oldBackground = null;
     private int currentColor = 0xFFC74B46;
@@ -59,6 +63,21 @@ public class MainActivity extends BaseActivity {
     };
 
     @Override
+    public void publish(int progress) {
+        //跟新进度条
+    }
+
+    @Override
+    public void change(int position) {
+        //切换状态，播放位置
+        if (pager.getCurrentItem() == 0)
+            myMusicListFragment.changeUiStatus(position);
+        else if (pager.getCurrentItem() == 1) {
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -66,9 +85,10 @@ public class MainActivity extends BaseActivity {
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         pager = (ViewPager) findViewById(R.id.pager);
         fragments = new ArrayList<Fragment>();
-        fragments.add(MyMusicListFragment.newInstance());
-        fragments.add(MyMusicListFragment.newInstance());
-        adapter = new MyPagerAdapter(getSupportFragmentManager(),fragments);
+        myMusicListFragment = MyMusicListFragment.newInstance();
+        fragments.add(myMusicListFragment);
+        fragments.add(NetMusicListFragment.newInstance());
+        adapter = new MyPagerAdapter(getSupportFragmentManager(), fragments);
 
         pager.setAdapter(adapter);
 
@@ -177,7 +197,8 @@ public class MainActivity extends BaseActivity {
 
         private final String[] TITLES = {"我的音乐", "在线音乐"};
         private List<Fragment> fragments;
-        public MyPagerAdapter(FragmentManager fm,List<Fragment> fragments) {
+
+        public MyPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
             super(fm);
             this.fragments = fragments;
         }

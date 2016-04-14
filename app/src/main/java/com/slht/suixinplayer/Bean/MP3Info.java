@@ -1,5 +1,7 @@
 package com.slht.suixinplayer.Bean;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Li on 2016/4/13.
  */
@@ -13,6 +15,15 @@ public class MP3Info {
     private long size;
     private String url;
     private int isMusic;
+    private Bitmap bitImage;
+
+    public Bitmap getBitImage() {
+        return bitImage;
+    }
+
+    public void setBitImage(Bitmap bitImage) {
+        this.bitImage = bitImage;
+    }
 
     public long getId() {
         return id;

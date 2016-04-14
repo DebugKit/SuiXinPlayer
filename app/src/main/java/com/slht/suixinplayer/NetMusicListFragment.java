@@ -7,4 +7,7 @@ import android.support.v4.app.Fragment;
  */
 public class NetMusicListFragment  extends Fragment{
 
+    public static NetMusicListFragment newInstance(){
+        return new NetMusicListFragment();
+    }
 }

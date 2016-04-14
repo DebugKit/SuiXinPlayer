@@ -17,6 +17,7 @@
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="0"
+            android:scaleType="centerCrop"
             android:src="@mipmap/app_logo2" />
 
         <RelativeLayout

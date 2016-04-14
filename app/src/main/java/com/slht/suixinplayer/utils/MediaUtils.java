@@ -2,12 +2,16 @@ package com.slht.suixinplayer.utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 
 import com.slht.suixinplayer.Bean.MP3Info;
+import com.slht.suixinplayer.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +106,7 @@ public class MediaUtils {
      * @param context
      * @return
      */
-    public static void getMP3Infos(final Context context,final QuerySuccess success) {
+    public static void getMP3Infos(final Context context, final QuerySuccess success) {
 
         new Thread(new Runnable() {
             @Override
@@ -123,6 +127,7 @@ public class MediaUtils {
                             .Audio.Media.ALBUM));
                     long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore
                             .Audio.Media.ALBUM_ID));
+                    Bitmap bitImage = getBitmap(getAlbumArt(context, (int) albumId));
                     long duration = cursor.getLong(cursor.getColumnIndex(MediaStore
                             .Audio.Media.DURATION));
                     long size = cursor.getLong(cursor.getColumnIndex(MediaStore
@@ -131,6 +136,7 @@ public class MediaUtils {
                             .Audio.Media.DATA));
                     int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore
                             .Audio.Media.IS_MUSIC));
+
                     if (isMusic != 0) {
                         mp3Info.setAlbum(album);
                         mp3Info.setAlbumId(albumId);
@@ -141,6 +147,7 @@ public class MediaUtils {
                         mp3Info.setSize(size);
                         mp3Info.setTitle(title);
                         mp3Info.setUrl(url);
+                        mp3Info.setBitImage(bitImage);
 
                         mp3Infos.add(mp3Info);
                     }
@@ -150,10 +157,35 @@ public class MediaUtils {
             }
         }).start();
     }
-    public  interface QuerySuccess{
-        void querySuccess(List<MP3Info> data);
+
+    private static String getAlbumArt(Context context, int albumId) {
+        String mUriAlbums = "content://media/external/audio/albums";
+        String[] projection = new String[]{"album_art"};
+        Cursor cursor = context.getContentResolver().query(Uri.parse(mUriAlbums + File.separator +
+                albumId), projection, null, null, null);
+        String album_art = null;
+        if (cursor.getCount() > 0 && cursor.getColumnCount() > 0) {
+            cursor.moveToNext();
+            album_art = cursor.getString(0);
+        }
+        cursor.close();
+        cursor = null;
+        return album_art;
     }
+
+    private static Bitmap getBitmap(String album_art) {
+        if (album_art == null)
+            return BitmapFactory.decodeFile("drawable://" + R.mipmap.app_logo2);
+        else {
+            return BitmapFactory.decodeFile(album_art);
+        }
+    }
+
     public long[] getMp3InfosIds(Context context) {
         return null;
+    }
+
+    public interface QuerySuccess {
+        void querySuccess(List<MP3Info> data);
     }
 }

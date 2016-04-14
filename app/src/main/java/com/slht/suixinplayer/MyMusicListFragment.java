@@ -1,6 +1,5 @@
 package com.slht.suixinplayer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -83,5 +82,9 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         activity.playService.paly(position);
+    }
+
+    public void changeUiStatus(int position) {
+
     }
 }

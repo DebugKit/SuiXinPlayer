@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
 
 import com.slht.suixinplayer.Bean.MP3Info;
 import com.slht.suixinplayer.R;
@@ -128,6 +130,7 @@ public class MediaUtils {
                     long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore
                             .Audio.Media.ALBUM_ID));
                     Bitmap bitImage = getBitmap(getAlbumArt(context, (int) albumId));
+                    Uri uri = Uri.parse(getAlbumArt(context, (int) albumId));
                     long duration = cursor.getLong(cursor.getColumnIndex(MediaStore
                             .Audio.Media.DURATION));
                     long size = cursor.getLong(cursor.getColumnIndex(MediaStore
@@ -147,6 +150,7 @@ public class MediaUtils {
                         mp3Info.setSize(size);
                         mp3Info.setTitle(title);
                         mp3Info.setUrl(url);
+                        mp3Info.setImgUri(Uri.parse(getAlbumArt(context, (int) albumId)));
                         mp3Info.setBitImage(bitImage);
 
                         mp3Infos.add(mp3Info);
@@ -174,10 +178,13 @@ public class MediaUtils {
     }
 
     private static Bitmap getBitmap(String album_art) {
+//        Uri u = Uri.parse(album_art);
         if (album_art == null)
-            return BitmapFactory.decodeFile("drawable://" + R.mipmap.app_logo2);
+            return BitmapFactory.decodeFile("mipmap://" + R.mipmap.app_logo2);
         else {
-            return BitmapFactory.decodeFile(album_art);
+            Bitmap bt = BitmapFactory.decodeFile(album_art);
+            Log.d("MediaUtils", "BitmapFactory.decodeFile(album_art):" + bt.getByteCount());
+            return bt;
         }
     }
 

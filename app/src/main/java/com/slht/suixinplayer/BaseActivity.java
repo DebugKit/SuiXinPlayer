@@ -9,7 +9,11 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
+import com.slht.suixinplayer.Bean.MP3Info;
 import com.slht.suixinplayer.service.PlayService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by LI on 2016/4/14.
@@ -57,9 +61,10 @@ public abstract class BaseActivity extends FragmentActivity {
     /**
      * 绑定服务
      */
-    public void bindPlayService() {
+    public void bindPlayService(ArrayList<MP3Info> mp3Infos) {
         if (!isBound) {
             Intent intent = new Intent(this, PlayService.class);
+            intent.putExtra("mp3Infos", mp3Infos);
             bindService(intent, conn, Context.BIND_AUTO_CREATE);
             isBound = true;
         }

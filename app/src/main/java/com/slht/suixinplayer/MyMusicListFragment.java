@@ -31,7 +31,7 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
     private ImageView pause;
     private ImageView next;
 
-    private List<MP3Info> mp3Infos;
+    private ArrayList<MP3Info> mp3Infos;
 
     public static MyMusicListFragment newInstance() {
 //        if (myMusicListFragment == null)
@@ -50,7 +50,7 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
         activity = (MainActivity) getActivity();
         initView();
         initData();
-        activity.bindPlayService();
+//        activity.bindPlayService();
         initEvent();
     }
 
@@ -76,6 +76,7 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
                         mp3Infos.addAll(data);
                         adapter = new MyMusicListAdapter(activity, data);
                         listview.setAdapter(adapter);
+                        activity.bindPlayService(mp3Infos);
                     }
                 });
             }
@@ -108,7 +109,7 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                song_image.setImageBitmap(mp3Infos.get(position).getBitImage());
+                song_image.setImageURI(mp3Infos.get(position).getImgUri());
                 song.setText(mp3Infos.get(position).getTitle());
                 singer.setText(mp3Infos.get(position).getArtist());
                 pause.setImageResource(R.mipmap.player_btn_pause_normal);

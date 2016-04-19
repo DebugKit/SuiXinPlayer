@@ -1,5 +1,6 @@
 package com.slht.suixinplayer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -33,6 +34,12 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
 
     private ArrayList<MP3Info> mp3Infos;
 
+    private int currentPosition;
+    /**
+     * 是否是暂停中
+     */
+    private boolean isPause = false;
+
     public static MyMusicListFragment newInstance() {
 //        if (myMusicListFragment == null)
 //            myMusicListFragment = new MyMusicListFragment();
@@ -56,6 +63,8 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
     private void initEvent() {
         listview.setOnItemClickListener(this);
         pause.setOnClickListener(this);
+        next.setOnClickListener(this);
+        song_image.setOnClickListener(this);
     }
 
     @Override
@@ -75,7 +84,7 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
                         mp3Infos.addAll(MediaUtils.MP3Infos);
                         adapter = new MyMusicListAdapter(activity, mp3Infos);
                         listview.setAdapter(adapter);
-                        activity.bindPlayService(mp3Infos);
+                        activity.bindPlayService();
                     }
                 });
             }
@@ -104,24 +113,43 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
         activity.playService.play(position);
     }
 
+    /**
+     * 改变UI状态
+     *
+     * @param position
+     */
     public void changeUiStatus(final int position) {
-//        activity.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-                song_image.setImageBitmap(mp3Infos.get(position).getBitImage());
-                song.setText(mp3Infos.get(position).getTitle());
-                singer.setText(mp3Infos.get(position).getArtist());
-                pause.setImageResource(R.mipmap.player_btn_pause_normal);
-//            }
-//        });
-
+        currentPosition = position;
+        song_image.setImageBitmap(mp3Infos.get(position).getBitImage());
+        song.setText(mp3Infos.get(position).getTitle());
+        singer.setText(mp3Infos.get(position).getArtist());
+        pause.setImageResource(R.mipmap.player_btn_pause_normal);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pause:
-                activity.playService.pause(pause);
+                if (activity.playService.isPlaying()) {
+                    pause.setImageResource(R.mipmap.player_btn_play_normal);
+                    activity.playService.pause();
+                    isPause = true;
+                } else {
+                    if (isPause) {
+                        pause.setImageResource(R.mipmap.player_btn_pause_normal);
+                        activity.playService.start();
+                    } else
+                        activity.playService.play(0);
+                    isPause = false;
+                }
+                break;
+            case R.id.next:
+                activity.playService.next();
+                break;
+            case R.id.song_image:
+                Intent intent = new Intent(activity,PlayMusicActivity.class);
+                intent.putExtra("isPause",isPause);
+                startActivity(intent);
                 break;
         }
     }

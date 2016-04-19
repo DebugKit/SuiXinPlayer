@@ -23,12 +23,22 @@ public class PlayService extends Service {
     private int currentPosition;
     private List<MP3Info> mp3Infos = null;
     private MusicUpdateListener musicUpdateListener;
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
     Runnable updateStatusRunnable = new Runnable() {
         @Override
         public void run() {
             while (true) {
                 if (musicUpdateListener != null) {
                     musicUpdateListener.onPublish(getCurrentProgress());
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -74,29 +84,27 @@ public class PlayService extends Service {
         }
     }
 
+    public boolean isPlaying() {
+        return mPlayer.isPlaying() ? true : false;
+    }
+
     /**
      * 暂停
      */
-    public void pause(ImageView imageView) {
-        if (mPlayer.isPlaying()) {
-            mPlayer.pause();
-            imageView.setImageResource(R.mipmap.player_btn_play_normal);
-        } else {
-            mPlayer.start();
-            imageView.setImageResource(R.mipmap.player_btn_pause_normal);
-        }
+    public void pause() {
+        mPlayer.pause();
     }
 
     /**
      * 下一首
      */
     public void next() {
-//        if (currentPosition + 1 >= mp3Infos.size() - 1) {
-//            currentPosition = 0;
-//        } else
-//            currentPosition++;
+        if (currentPosition + 1 >= mp3Infos.size() - 1) {
+            currentPosition = 0;
+        } else
+            currentPosition++;
 
-        currentPosition = (currentPosition + 1 >= mp3Infos.size() - 1) ? 0 : currentPosition++;
+//        currentPosition = (currentPosition + 1 >= mp3Infos.size() - 1) ? 0 : currentPosition++;
         play(currentPosition);
     }
 
@@ -136,6 +144,15 @@ public class PlayService extends Service {
 
     public void setMusicUpdateListener(MusicUpdateListener musicUpdateListener) {
         this.musicUpdateListener = musicUpdateListener;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (es != null && !es.isShutdown()) {
+            es.shutdown();
+            es = null;
+        }
     }
 
     public interface MusicUpdateListener {

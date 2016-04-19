@@ -41,6 +41,7 @@ public abstract class BaseActivity extends FragmentActivity {
             playBinder = (PlayService.PlayBinder) service;
             playService = playBinder.getPlayService();
             playService.setMusicUpdateListener(musicUpdateListener);
+            musicUpdateListener.onChange(playService.getCurrentPosition());
         }
 
         @Override
@@ -62,7 +63,7 @@ public abstract class BaseActivity extends FragmentActivity {
     /**
      * 绑定服务
      */
-    public void bindPlayService(ArrayList<MP3Info> mp3Infos) {
+    public void bindPlayService() {
         if (!isBound) {
             Intent intent = new Intent(this, PlayService.class);
 //            intent.putExtra("mp3Infos",mp3Infos);

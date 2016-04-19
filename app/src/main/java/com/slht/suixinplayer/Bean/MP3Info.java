@@ -1,14 +1,36 @@
 package com.slht.suixinplayer.Bean;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.io.Serializable;
 
 /**
  * Created by Li on 2016/4/13.
  */
-public class MP3Info implements Serializable{
+public class MP3Info implements Parcelable {
+    public static final Parcelable.Creator<MP3Info> CREATOR = new Creator<MP3Info>() {
+        @Override
+        public MP3Info createFromParcel(Parcel source) {
+            MP3Info mp3Info = new MP3Info();
+            mp3Info.id = source.readLong();
+            mp3Info.title = source.readString();
+            mp3Info.artist = source.readString();
+            mp3Info.album = source.readString();
+            mp3Info.albumId = source.readLong();
+            mp3Info.duration = source.readLong();
+            mp3Info.size = source.readLong();
+            mp3Info.url = source.readString();
+            mp3Info.isMusic = source.readInt();
+            mp3Info.bitImage = Bitmap.CREATOR.createFromParcel(source);
+            return mp3Info;
+        }
+
+        @Override
+        public MP3Info[] newArray(int size) {
+            return new MP3Info[size];
+        }
+    };
     private long id;
     private String title;
     private String artist;
@@ -19,16 +41,6 @@ public class MP3Info implements Serializable{
     private String url;
     private int isMusic;
     private Bitmap bitImage;
-
-    private Uri imgUri;
-
-    public Uri getImgUri() {
-        return imgUri;
-    }
-
-    public void setImgUri(Uri imgUri) {
-        this.imgUri = imgUri;
-    }
 
     public Bitmap getBitImage() {
         return bitImage;
@@ -108,5 +120,24 @@ public class MP3Info implements Serializable{
 
     public void setIsMusic(int isMusic) {
         this.isMusic = isMusic;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(artist);
+        dest.writeString(album);
+        dest.writeLong(albumId);
+        dest.writeLong(duration);
+        dest.writeLong(size);
+        dest.writeString(url);
+        dest.writeInt(isMusic);
+        bitImage.writeToParcel(dest, 0);
     }
 }

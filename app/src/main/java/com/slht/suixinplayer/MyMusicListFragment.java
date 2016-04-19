@@ -50,7 +50,6 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
         activity = (MainActivity) getActivity();
         initView();
         initData();
-//        activity.bindPlayService();
         initEvent();
     }
 
@@ -68,13 +67,13 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
     private void initData() {
         MediaUtils.getMP3Infos(activity, new MediaUtils.QuerySuccess() {
             @Override
-            public void querySuccess(final List<MP3Info> data) {
+            public void querySuccess(boolean isSuccess) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         mp3Infos = new ArrayList<MP3Info>();
-                        mp3Infos.addAll(data);
-                        adapter = new MyMusicListAdapter(activity, data);
+                        mp3Infos.addAll(MediaUtils.MP3Infos);
+                        adapter = new MyMusicListAdapter(activity, mp3Infos);
                         listview.setAdapter(adapter);
                         activity.bindPlayService(mp3Infos);
                     }
@@ -102,19 +101,19 @@ public class MyMusicListFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        activity.playService.paly(position);
+        activity.playService.play(position);
     }
 
     public void changeUiStatus(final int position) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                song_image.setImageURI(mp3Infos.get(position).getImgUri());
+//        activity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+                song_image.setImageBitmap(mp3Infos.get(position).getBitImage());
                 song.setText(mp3Infos.get(position).getTitle());
                 singer.setText(mp3Infos.get(position).getArtist());
                 pause.setImageResource(R.mipmap.player_btn_pause_normal);
-            }
-        });
+//            }
+//        });
 
     }
 

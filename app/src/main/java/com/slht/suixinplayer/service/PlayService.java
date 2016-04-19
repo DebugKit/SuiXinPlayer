@@ -19,7 +19,6 @@ import java.util.concurrent.Executors;
 
 public class PlayService extends Service {
 
-    boolean isGet = false;
     private MediaPlayer mPlayer;
     private int currentPosition;
     private List<MP3Info> mp3Infos = null;
@@ -41,7 +40,7 @@ public class PlayService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        mp3Infos = (List<MP3Info>) intent.getSerializableExtra("mp3Infos");
+        mp3Infos = MediaUtils.MP3Infos;
         return new PlayBinder();
     }
 
@@ -57,7 +56,7 @@ public class PlayService extends Service {
      *
      * @param position
      */
-    public void paly(final int position) {
+    public void play(final int position) {
 
         if (position >= 0 && position < mp3Infos.size()) {
             try {
@@ -73,7 +72,6 @@ public class PlayService extends Service {
                 musicUpdateListener.onChange(currentPosition);
             }
         }
-
     }
 
     /**
@@ -99,7 +97,7 @@ public class PlayService extends Service {
 //            currentPosition++;
 
         currentPosition = (currentPosition + 1 >= mp3Infos.size() - 1) ? 0 : currentPosition++;
-        paly(currentPosition);
+        play(currentPosition);
     }
 
     /**
@@ -110,7 +108,7 @@ public class PlayService extends Service {
             currentPosition = mp3Infos.size() - 1;
         } else
             currentPosition--;
-        paly(currentPosition);
+        play(currentPosition);
     }
 
     /**

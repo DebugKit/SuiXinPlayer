@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.slht.suixinplayer.Bean.MP3Info;
 import com.slht.suixinplayer.service.PlayService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by LI on 2016/4/14.
@@ -22,6 +22,7 @@ public abstract class BaseActivity extends FragmentActivity {
 
     public PlayService playService;
     private boolean isBound = false;
+    public  PlayService.PlayBinder playBinder;
 
     private PlayService.MusicUpdateListener musicUpdateListener = new PlayService.MusicUpdateListener() {
         @Override
@@ -37,7 +38,7 @@ public abstract class BaseActivity extends FragmentActivity {
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            PlayService.PlayBinder playBinder = (PlayService.PlayBinder) service;
+            playBinder = (PlayService.PlayBinder) service;
             playService = playBinder.getPlayService();
             playService.setMusicUpdateListener(musicUpdateListener);
         }
@@ -64,8 +65,13 @@ public abstract class BaseActivity extends FragmentActivity {
     public void bindPlayService(ArrayList<MP3Info> mp3Infos) {
         if (!isBound) {
             Intent intent = new Intent(this, PlayService.class);
-            intent.putExtra("mp3Infos", mp3Infos);
-            bindService(intent, conn, Context.BIND_AUTO_CREATE);
+//            intent.putExtra("mp3Infos",mp3Infos);
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("mp3Infos",mp3Infos);
+//            intent.putExtras(bundle);
+            Log.d("BaseActivity", "bindService(intent, conn, Context.BIND_AUTO_CREATE):" + bindService(intent, conn,
+                    Context.BIND_AUTO_CREATE));
+
             isBound = true;
         }
     }
